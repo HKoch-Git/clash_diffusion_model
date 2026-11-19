@@ -1,6 +1,16 @@
 import numpy as np # follow standard idioms is best practice
 import matplotlib.pyplot as plt
 
+def plot_profile(grid, elevation, color="r", title=None, output=None):
+    plt.figure()
+    plt.plot(grid, elevation, color);
+    plt.xlabel("Profile Length");
+    plt.ylabel("Elevation");
+    if title is not None:
+        plt.title(title);
+    if output is not None:
+        plt.savefig(output)
+
 
 D = 100 # diffusivity
 Lx = 300 # model domain
@@ -12,17 +22,9 @@ z_left = 500
 z_right = 0
 z[x <= (Lx /2)] = z_left
 z[x > (Lx/2)] = z_right # slicing ("subscripting") and setting z to the determined values
-plt.figure()
-plt.plot(x, z, "k");
-plt.xlabel("x");
-plt.ylabel("z");
-plt.title("Initial hillslope profile");
+plot_profile(x, z, color="k", title="Initial hillslope profile", output="Initial.png")
 nt = 5000 # number of time steps
 dt = 0.5 * dx**2 / D # time step
 for t in range(0, nt):
 	z[1:-1] += D * dt / dx ** 2 * (z[:-2] - 2*z[1:-1] + z[2:])
-plt.figure()
-plt.plot(x, z, "b");
-plt.xlabel("x");
-plt.ylabel("z");
-plt.title("Final hillslope profile");
+plot_profile(x, z, color="b", title="Final hillslope profile", output="Final.png")
